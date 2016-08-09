@@ -52,6 +52,15 @@ public class Granja {
         };
         animales.add(am2);
         
+        //agreguen un tercer animal
+        Perro perruno = new Perro(){
+            @Override
+            public void hablar(){
+                System.out.println("Woof Woof");
+            }
+        };
+        animales.add(perruno);
+        
         for(Animal ani : animales){
             System.out.println("----------");
             ani.hablar();

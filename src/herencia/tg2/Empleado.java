@@ -12,6 +12,7 @@ import java.util.Calendar;
  * @author Aula
  */
 public class Empleado {
+    public static final int VERSION = 9;
     protected int codigo;
     protected String nombre;
     protected double salario;
