@@ -11,7 +11,7 @@ import java.util.Calendar;
  *
  * @author Mae Lindell
  */
-public class CuentaPlazoFijo extends CuentaBancaria {
+public final class CuentaPlazoFijo extends CuentaBancaria {
      private Calendar findePlazo;
      private double intereses;
     

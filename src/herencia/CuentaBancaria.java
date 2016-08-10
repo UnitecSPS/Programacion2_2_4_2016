@@ -43,15 +43,15 @@ public class CuentaBancaria {
         return cliente;
     }
 
-    public String getTipo() {
+    public final String getTipo() {
         return tipo;
     }
 
-    public Calendar getApertura() {
+    public final Calendar getApertura() {
         return apertura;
     }
 
-    public void setTasa(double tasa) {
+    public final void setTasa(double tasa) {
         this.tasa = tasa;
     }
     

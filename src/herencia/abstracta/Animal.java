@@ -16,7 +16,7 @@ public abstract class Animal {
         this.patas = patas;
     }
 
-    public int getPatas() {
+    public final int getPatas() {
         return patas;
     }
     

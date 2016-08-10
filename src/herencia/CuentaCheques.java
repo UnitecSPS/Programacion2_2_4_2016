@@ -9,7 +9,7 @@ package herencia;
  *
  * @author Mae Lindell
  */
-public class CuentaCheques extends CuentaBancaria {
+public final class CuentaCheques extends CuentaBancaria {
     public CuentaCheques(int n,String c,String t){
         super(n,c,t);
     

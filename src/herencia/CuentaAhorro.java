@@ -11,7 +11,7 @@ import java.util.Calendar;
  *
  * @author Aula
  */
-public class CuentaAhorro extends CuentaBancaria {
+public final class CuentaAhorro extends CuentaBancaria {
     private Calendar ultimoUso;
     
     public CuentaAhorro(int n, String c, String t){

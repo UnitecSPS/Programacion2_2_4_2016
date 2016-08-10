@@ -37,7 +37,7 @@ public class Granja {
             }
         };
         animales.add(am);
-        
+
         Animal am2 = new Animal(5) {
 
             @Override
