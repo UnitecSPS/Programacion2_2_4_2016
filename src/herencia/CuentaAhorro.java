@@ -5,13 +5,14 @@
  */
 package herencia;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
  *
  * @author Aula
  */
-public final class CuentaAhorro extends CuentaBancaria {
+public final class CuentaAhorro extends CuentaBancaria implements Serializable {
     private Calendar ultimoUso;
     
     public CuentaAhorro(int n, String c, String t){

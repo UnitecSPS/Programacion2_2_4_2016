@@ -11,6 +11,7 @@ package herencia;
  */
 public class Bancatlan {
     public static void main(String[] args) {
+        
         Salvable salva = new SalvarEnArchivo();
         
         salva.salvar(new CuentaAhorro(2, "Mae", "LPS"));
@@ -18,5 +19,8 @@ public class Bancatlan {
         
         if(salva.getCuenta(3)!=null)
             System.out.println("Encontre la cuenta!");
+        
+        if(salva instanceof Salvable)
+            System.out.println("TRUE");
     }
 }

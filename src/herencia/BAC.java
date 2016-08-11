@@ -5,6 +5,7 @@
  */
 package herencia;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -30,6 +31,9 @@ public class BAC {
             
             System.out.print("-"+cb+" ");
             cb.quienSoy();
+            
+            if(cb instanceof Serializable)
+                System.out.println("Desmenuzando..."+cb.numero);
         }
     }
 }

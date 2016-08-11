@@ -10,6 +10,7 @@ package herencia;
  * @author Aula
  */
 public interface Salvable {
+    int VERSION = 1;
     void salvar(CuentaBancaria cb);
     CuentaBancaria getCuenta(int cod);
 }
