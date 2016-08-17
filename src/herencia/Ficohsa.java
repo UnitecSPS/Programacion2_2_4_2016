@@ -24,7 +24,7 @@ public class Ficohsa {
         //downcasting indirecto
         CuentaAhorro cah = (CuentaAhorro)ca;
         System.out.println("Esta Activa: "+ cah.isActiva());
-        cah.setTasa(0.09);
+        //cah.setTasa(0.09);
         System.out.println(ca);
     }
 }

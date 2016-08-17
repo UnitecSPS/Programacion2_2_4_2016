@@ -12,7 +12,7 @@ package herencia;
 public final class CuentaCheques extends CuentaBancaria {
     public CuentaCheques(int n,String c,String t){
         super(n,c,t);
-    
+        tipo = TipoCuenta.CHEQUES;
     }
     
     @Override

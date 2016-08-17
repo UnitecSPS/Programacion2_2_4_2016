@@ -13,18 +13,18 @@ import java.util.Calendar;
  */
 public class CuentaBancaria {
     protected int numero;
-    protected double saldo, tasa;
-    protected String cliente, tipo;
+    protected double saldo;
+    protected TipoCuenta tipo;
+    protected String cliente, moneda;
     protected Calendar apertura;
     
-    public CuentaBancaria(int n, String c, String t){
+    public CuentaBancaria(int n, String c, String m){
         System.out.println("Llamaste al papa vea?");
         numero = n;
         cliente = c;
-        tipo = t;
+        moneda = m;
         saldo = 0;
         apertura = Calendar.getInstance();
-        tasa = 0;
     }
 
     public int getNumero() {
@@ -35,26 +35,19 @@ public class CuentaBancaria {
         return saldo;
     }
 
-    public double getTasa() {
-        return tasa;
-    }
 
     public String getCliente() {
         return cliente;
     }
 
     public final String getTipo() {
-        return tipo;
+        return moneda;
     }
 
     public final Calendar getApertura() {
         return apertura;
     }
 
-    public final void setTasa(double tasa) {
-        this.tasa = tasa;
-    }
-    
     public void depositar(double m){
         saldo += m;
     }

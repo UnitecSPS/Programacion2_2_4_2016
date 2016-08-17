@@ -19,6 +19,7 @@ public final class CuentaPlazoFijo extends CuentaBancaria {
         super(n,c,t);
         intereses = 0;
         findePlazo = Calendar.getInstance();
+        tipo = TipoCuenta.PLAZO;
     }
     
     public void setPlazo(int y, int m, int d) {

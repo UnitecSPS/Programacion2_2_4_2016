@@ -17,7 +17,7 @@ public final class CuentaAhorro extends CuentaBancaria implements Serializable {
     
     public CuentaAhorro(int n, String c, String t){
         super(n,c,t);
-        tasa = 0.05;
+        tipo = TipoCuenta.AHORRO;
         refreshUltimoUso();
     }
     
@@ -39,7 +39,7 @@ public final class CuentaAhorro extends CuentaBancaria implements Serializable {
     @Override
     public String toString(){
         return super.toString()+", activa="+isActiva()+
-                ", tasa="+tasa;
+                ", tasa="+tipo.tasa();
     }
 
     @Override
