@@ -44,6 +44,15 @@ public final class CuentaPlazoFijo extends CuentaBancaria {
         }
         return false; 
     }
+
+    @Override
+    public void registrarIntereses() {
+        /*
+            si el plazo no ha terminado
+                Sacar el monto de interes pero no se le suma
+                al saldo, se le suma a los intereses
+        */
+    }
     
     
 }

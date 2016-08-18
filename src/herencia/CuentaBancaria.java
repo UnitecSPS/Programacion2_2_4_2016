@@ -70,5 +70,8 @@ public class CuentaBancaria {
                 ", saldo= Lps." + saldo + ", tipo=" + tipo;
     }
     
-    
+    public void registrarIntereses(){
+        //1- Saca el monto de interes para sumarlo al saldo
+        //  - Monto = tasa de intereses * el saldo
+    }
 }
