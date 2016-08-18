@@ -23,5 +23,10 @@ public class SalvarEnArchivo implements SalvablePlus {
         System.out.println("Buscando en el archivo....");
         return null;
     }
+
+    @Override
+    public CuentaBancaria[] cuentas() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

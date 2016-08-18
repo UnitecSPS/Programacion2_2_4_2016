@@ -27,5 +27,10 @@ public class SalvarEnMemoria implements SalvablePlus {
         }
         return null;
     }
+
+    @Override
+    public CuentaBancaria[] cuentas() {
+        return (CuentaBancaria[])cuentas.toArray();
+    }
     
 }

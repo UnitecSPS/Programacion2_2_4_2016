@@ -13,4 +13,5 @@ public interface Salvable {
     int VERSION = 1;
     void salvar(CuentaBancaria cb);
     CuentaBancaria getCuenta(int cod);
+    CuentaBancaria[] cuentas();
 }

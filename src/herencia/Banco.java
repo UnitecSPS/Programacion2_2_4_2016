@@ -26,7 +26,18 @@ public class Banco {
      * @param tipo Tipo Cuenta
      */
     public void addCuenta(int num, String cli, String mo, TipoCuenta tipo){
-        
+        if(manager.getCuenta(num) == null){
+            switch(tipo){
+                case AHORRO:
+                    manager.salvar( new CuentaAhorro(num, cli, mo));
+                    break;
+                case CHEQUES:
+                    manager.salvar(new CuentaCheques(num, cli, mo));
+                    break;
+                default:
+                    manager.salvar(new CuentaPlazoFijo(num, cli, mo));
+            }
+        }
     }
     
     /**
