@@ -73,5 +73,7 @@ public class CuentaBancaria {
     public void registrarIntereses(){
         //1- Saca el monto de interes para sumarlo al saldo
         //  - Monto = tasa de intereses * el saldo
+        double monto = saldo * tipo.tasa();
+        saldo += monto;
     }
 }

@@ -47,11 +47,10 @@ public final class CuentaPlazoFijo extends CuentaBancaria {
 
     @Override
     public void registrarIntereses() {
-        /*
-            si el plazo no ha terminado
-                Sacar el monto de interes pero no se le suma
-                al saldo, se le suma a los intereses
-        */
+        if(findePlazo.after(Calendar.getInstance())){
+            double monto = saldo * tipo.tasa();
+            intereses += monto;
+        }
     }
     
     

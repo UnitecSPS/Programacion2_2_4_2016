@@ -61,13 +61,12 @@ public final class CuentaAhorro extends CuentaBancaria implements Serializable {
 
     @Override
     public void registrarIntereses() {
-        /*
-            Llama a la version del padre pero:
-                -Si la cuenta esta activa
-                -Si no lo es:
-                    Le resta 100 lps al saldo con el
-                    cuidado de no dejarla en cero
-        */
+        if(isActiva())
+            super.registrarIntereses();
+        else{
+            double bajar = saldo>100 ? 100 : saldo;
+            saldo -= bajar;
+        }
     }
     
     
