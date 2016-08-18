@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author Aula
  */
-public class SalvarEnMemoria implements Salvable {
+public class SalvarEnMemoria implements SalvablePlus {
     ArrayList<CuentaBancaria> cuentas = new ArrayList<>();
     
     @Override

@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  * @author Aula
  */
-public class SalvarEnArchivo implements Salvable, Serializable {
+public class SalvarEnArchivo implements SalvablePlus {
 
     @Override
     public void salvar(CuentaBancaria cb) {

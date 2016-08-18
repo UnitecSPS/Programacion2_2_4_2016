@@ -5,6 +5,8 @@
  */
 package herencia;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Aula
@@ -12,7 +14,7 @@ package herencia;
 public class Bancatlan {
     public static void main(String[] args) {
         
-        Salvable salva = new SalvarEnArchivo();
+        SalvablePlus salva = new SalvarEnMemoria();
         
         salva.salvar(new CuentaAhorro(2, "Mae", "LPS"));
         salva.salvar(new CuentaPlazoFijo(3, "Monique", "LPS"));
@@ -22,5 +24,8 @@ public class Bancatlan {
         
         if(salva instanceof Salvable)
             System.out.println("TRUE");
+        if(salva instanceof Serializable)
+            System.out.println("Es Serializable");
+        
     }
 }
