@@ -48,7 +48,7 @@ public class Sky {
             System.out.println(u);
             if(u instanceof TVService){
                 tv++;
-                ((TVService) u).imprimir(0);
+                ((TVService) u).imprimir();
             }
             else
                 i++;

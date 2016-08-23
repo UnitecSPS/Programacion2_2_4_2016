@@ -5,6 +5,7 @@
  */
 package errores;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -22,8 +23,19 @@ public class ClaseFragil {
             foo();
             System.out.println("Finalizando Try----");
         }
+        catch(ArrayIndexOutOfBoundsException e){
+            System.out.println("Por favor ingrese una posicion valida");
+        }
+        catch(InputMismatchException e){
+            System.out.println("Por favor ingrese un entero");
+        }
+        catch(NumberFormatException e){
+            System.out.println("El valor no es numero");
+        }
         catch(Exception e){
-            System.out.println("Sucedio un Error..");
+            System.out.println("Sucedio un Error.."+e);
+            //e.printStackTrace();
+            //System.out.println(e.getStackTrace()[0]);
         }
         
         System.out.println("Finalizando Main...");
@@ -37,10 +49,19 @@ public class ClaseFragil {
 
     private static void boo() {
         System.out.println("Iniciando boo....");
-        int arr[] = {1,0,5,2};
+        String arr[] = {"0","10","hola",null};
         System.out.print("Posicion: ");
+        
+        //Puede Suceder un InputMismatch
         int pos = lea.nextInt();
-        System.out.println("Valor: "+ arr[pos]);
+        //Puede Sucer un ArrayIndexOutOfBound
+        String valor = arr[pos];
+        //Puede suceder un NullPointerExeption
+        System.out.println("Longitud del valor: "+valor.length());
+        //Puede Suceder un NumberFormatException
+        int num = Integer.parseInt(valor);
+        //Puede Sucer un Arithmetic
+        System.out.println("Valor: "+ 10/num);
         System.out.println("Finalizando boo....");
     }
     
