@@ -5,6 +5,7 @@
  */
 package herencia;
 
+import errores.InvalidAmountException;
 import java.util.Calendar;
 
 /**
@@ -49,6 +50,8 @@ public class CuentaBancaria {
     }
 
     public void depositar(double m){
+        if(m < 0)
+            throw new InvalidAmountException(m);
         saldo += m;
     }
     

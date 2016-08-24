@@ -5,6 +5,8 @@
  */
 package herencia;
 
+import errores.InvalidAmountException;
+
 /**
  *
  * @author Aula
@@ -13,7 +15,14 @@ public class Ficohsa {
     public static void main(String[] args) {
         //upcasting
         CuentaBancaria ca = new CuentaAhorro(1,"Frances","Lps");
-        System.out.println(ca);
+        
+        try{
+            ca.depositar(-50);
+            System.out.println(ca);
+        }
+        catch(InvalidAmountException e){
+            System.out.println(e);
+        }
         
         if(ca instanceof CuentaAhorro)
             System.out.println("duh! si soy de Ahorro asi me llamo");

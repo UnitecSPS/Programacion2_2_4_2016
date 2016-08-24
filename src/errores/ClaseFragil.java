@@ -16,7 +16,8 @@ public class ClaseFragil {
     static Scanner lea = new Scanner(System.in);
     
     public static void main(String[] args) {
-        System.out.println("Iniciando Main...");
+        String x = null;
+        System.out.println("Iniciando Main..."/*+x.length()*/);
         
         try{
             System.out.println("Iniciando Try---");
@@ -32,10 +33,13 @@ public class ClaseFragil {
         catch(NumberFormatException e){
             System.out.println("El valor no es numero");
         }
-        catch(Exception e){
+        /*catch(Exception e){
             System.out.println("Sucedio un Error.."+e);
-            //e.printStackTrace();
+            e.printStackTrace();
             //System.out.println(e.getStackTrace()[0]);
+        }*/
+        finally{
+            System.out.println("Cerrando todo...");
         }
         
         System.out.println("Finalizando Main...");
