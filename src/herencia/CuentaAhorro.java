@@ -5,6 +5,7 @@
  */
 package herencia;
 
+import errores.InvalidAmountException;
 import java.io.Serializable;
 import java.util.Calendar;
 
@@ -43,7 +44,7 @@ public final class CuentaAhorro extends CuentaBancaria implements Serializable {
     }
 
     @Override
-    public void depositar(double m) {
+    public void depositar(double m)throws InvalidAmountException {
         if(isActiva()){
             super.depositar(m);
             refreshUltimoUso();

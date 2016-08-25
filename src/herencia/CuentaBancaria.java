@@ -49,7 +49,7 @@ public class CuentaBancaria {
         return apertura;
     }
 
-    public void depositar(double m){
+    public void depositar(double m)throws InvalidAmountException{
         if(m < 0)
             throw new InvalidAmountException(m);
         saldo += m;

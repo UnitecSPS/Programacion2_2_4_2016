@@ -3,15 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package errores;
+package errores.prueba3;
 
 /**
  *
  * @author Aula
  */
-public class InvalidAmountException extends Exception {
-    
-    public InvalidAmountException(double m){
-        super(m+" no es valido.");
+public class AsientoOcupadoException extends RuntimeException {
+    public AsientoOcupadoException(int asi){
+        super("Asiento "+asi+" ya esta ocupado");
     }
 }

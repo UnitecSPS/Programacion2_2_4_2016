@@ -5,6 +5,7 @@
  */
 package errores;
 
+import herencia.CuentaBancaria;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -33,11 +34,11 @@ public class ClaseFragil {
         catch(NumberFormatException e){
             System.out.println("El valor no es numero");
         }
-        /*catch(Exception e){
+        catch(Exception e){
             System.out.println("Sucedio un Error.."+e);
             e.printStackTrace();
             //System.out.println(e.getStackTrace()[0]);
-        }*/
+        }
         finally{
             System.out.println("Cerrando todo...");
         }
@@ -53,7 +54,7 @@ public class ClaseFragil {
 
     private static void boo() {
         System.out.println("Iniciando boo....");
-        String arr[] = {"0","10","hola",null};
+        String arr[] = {"0","10","-5","hola",null};
         System.out.print("Posicion: ");
         
         //Puede Suceder un InputMismatch
@@ -66,6 +67,9 @@ public class ClaseFragil {
         int num = Integer.parseInt(valor);
         //Puede Sucer un Arithmetic
         System.out.println("Valor: "+ 10/num);
+        //depositar el numero provoca InvalidAmountException
+        CuentaBancaria cb = new CuentaBancaria(1,"CL", "Lps");
+        cb.depositar(num);
         System.out.println("Finalizando boo....");
     }
     
