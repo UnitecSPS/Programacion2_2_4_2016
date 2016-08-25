@@ -46,13 +46,13 @@ public class ClaseFragil {
         System.out.println("Finalizando Main...");
     }
 
-    private static void foo() {
+    private static void foo()throws InvalidAmountException {
         System.out.println("Iniciando foo...");
         boo();
         System.out.println("Finalizando foo...");
     }
 
-    private static void boo() {
+    private static void boo()throws InvalidAmountException {
         System.out.println("Iniciando boo....");
         String arr[] = {"0","10","-5","hola",null};
         System.out.print("Posicion: ");
