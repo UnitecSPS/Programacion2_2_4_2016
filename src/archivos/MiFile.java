@@ -61,21 +61,35 @@ public class MiFile {
     void dir() {
         if(mifile.isDirectory()){
             //1- Imprimen el nombre
-            
+            System.out.println("Folder: "+mifile.getName());
+            int dirs=0, files=0, bytes=0;
             //Muestren su contenido
             for(File child : mifile.listFiles()){
                 //2-ultima mofif
-                
+                System.out.print(new Date(child.lastModified()));
                 //3-Si es DIR
-                
+                if(child.isDirectory()){
+                    System.out.print("\t<DIR>\t ");
+                    dirs++;
+                }
                 //4-Si es File imprimo los bytes
+                if(child.isFile()){
+                    System.out.print("\t     \t ");
+                    System.out.print(child.length());
+                    files++;
+                    bytes += child.length();
+                }
                 
                 //5-Imprimo el nombre
+                System.out.println("\t"+child.getName());
             }
             
             //6-imprimo la cantidad de files y dirs que tiene
+            System.out.println("("+files+") files y ("+dirs+") dirs");
             //7-Imprimir la suma total de bytes
+            System.out.println(bytes+ " bytes.");
             //8-Bytes free miren que funcion en File les puede servir
+            System.out.println(mifile.getFreeSpace()+" bytes free");
         }
         else
             System.out.println("Accion no permitida");
