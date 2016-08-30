@@ -49,6 +49,11 @@ public class MiFile {
     boolean crear()throws IOException {
         return mifile.createNewFile();
     }
+
+    boolean crearDir() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
     
 }

@@ -25,6 +25,7 @@ public class FileTest {
             System.out.println("1- Set Archivo/Folder");
             System.out.println("2- Ver Informacion");
             System.out.println("3- Crear Archivo");
+            System.out.println("4- Crear un directorio");
             System.out.println("10- Salir");
             System.out.print("Escoja Opcion: ");
             
@@ -44,6 +45,13 @@ public class FileTest {
                             System.out.println("SE CREO!");
                         else
                             System.out.println("NO SE CREO!");
+                        break;
+                    case 4:
+                        if( mf.crearDir() )
+                            System.out.println("SE CREO!");
+                        else
+                            System.out.println("NO SE CREO!");
+                        break;
                 }
             }
             catch(InputMismatchException e){
