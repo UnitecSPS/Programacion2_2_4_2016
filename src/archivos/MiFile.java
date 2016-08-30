@@ -48,10 +48,37 @@ public class MiFile {
 
     boolean crear()throws IOException {
         return mifile.createNewFile();
-    }
+    } 
 
     boolean crearDir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return mifile.mkdirs();
+    }
+
+    boolean borrar() {
+        return mifile.delete();
+    }
+
+    void dir() {
+        if(mifile.isDirectory()){
+            //1- Imprimen el nombre
+            
+            //Muestren su contenido
+            for(File child : mifile.listFiles()){
+                //2-ultima mofif
+                
+                //3-Si es DIR
+                
+                //4-Si es File imprimo los bytes
+                
+                //5-Imprimo el nombre
+            }
+            
+            //6-imprimo la cantidad de files y dirs que tiene
+            //7-Imprimir la suma total de bytes
+            //8-Bytes free miren que funcion en File les puede servir
+        }
+        else
+            System.out.println("Accion no permitida");
     }
     
     

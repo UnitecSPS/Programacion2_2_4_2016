@@ -26,6 +26,9 @@ public class FileTest {
             System.out.println("2- Ver Informacion");
             System.out.println("3- Crear Archivo");
             System.out.println("4- Crear un directorio");
+            System.out.println("5- Borrar");
+            System.out.println("6- Renombrar");
+            System.out.println("7- Dir");
             System.out.println("10- Salir");
             System.out.print("Escoja Opcion: ");
             
@@ -52,6 +55,19 @@ public class FileTest {
                         else
                             System.out.println("NO SE CREO!");
                         break;
+                    case 5:
+                        if( mf.borrar() )
+                            System.out.println("SE BORRO");
+                        else
+                            System.out.println("NO SE BORRO!");
+                        break;
+                    case 6:
+                        System.out.println("TODO: rename");
+                        System.out.println("Con la ayuda de la funcion de File renameTo");
+                        break;
+                    case 7:
+                        mf.dir();
+                        break;
                 }
             }
             catch(InputMismatchException e){
@@ -66,4 +82,5 @@ public class FileTest {
             }
         }while(op!=10);
     }
+
 }
