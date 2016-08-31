@@ -15,10 +15,10 @@ import java.util.Scanner;
  * @author Aula
  */
 public class FileTest {
+    static Scanner lea = new Scanner(System.in);
+    
     public static void main(String[] args) {
         MiFile mf = new MiFile();
-        Scanner lea = new Scanner(System.in);
-        
         int op=0;
         
         do{
@@ -29,6 +29,8 @@ public class FileTest {
             System.out.println("5- Borrar");
             System.out.println("6- Renombrar");
             System.out.println("7- Dir");
+            System.out.println("8- Tree");
+            System.out.println("9- Escribir un texto");
             System.out.println("10- Salir");
             System.out.print("Escoja Opcion: ");
             
@@ -68,6 +70,11 @@ public class FileTest {
                     case 7:
                         mf.dir();
                         break;
+                    case 8:
+                        mf.tree();
+                    case 9:
+                        System.out.print("Append: ");
+                        mf.writeText(lea.next().equalsIgnoreCase("SI"));
                 }
             }
             catch(InputMismatchException e){

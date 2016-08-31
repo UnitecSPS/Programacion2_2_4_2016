@@ -6,6 +6,7 @@
 package archivos;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
@@ -93,6 +94,35 @@ public class MiFile {
         }
         else
             System.out.println("Accion no permitida");
+    }
+
+    void tree() {
+        tree(mifile,"");
+    }
+
+    private void tree(File dir, String tab) {
+        if(dir.isDirectory() && !dir.isHidden()){
+            System.out.println(tab+dir.getName());
+            for(File child : dir.listFiles()){
+                tree(child,tab+"--");
+            }
+        }
+    }
+
+    void writeText(boolean append)throws IOException {
+        try(FileWriter fw = new FileWriter(mifile, append)){
+            do{
+                String txt = FileTest.lea.nextLine();
+
+                if(!txt.equals(":q")){
+                    fw.write(txt+"\n");
+                    //fw.flush();
+                }
+                else
+                    break;
+
+            }while(true);
+        }
     }
     
     
