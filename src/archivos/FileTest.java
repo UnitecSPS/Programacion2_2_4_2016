@@ -30,8 +30,10 @@ public class FileTest {
             System.out.println("6- Renombrar");
             System.out.println("7- Dir");
             System.out.println("8- Tree");
-            System.out.println("9- Escribir un texto");
-            System.out.println("10- Salir");
+            System.out.println("9- PRUEBA 4: Max File For");
+            System.out.println("10- Escribir un texto");
+            System.out.println("11- Leer de un texto");
+            System.out.println("12- Salir");
             System.out.print("Escoja Opcion: ");
             
             try{
@@ -72,9 +74,17 @@ public class FileTest {
                         break;
                     case 8:
                         mf.tree();
+                        break;
                     case 9:
+                        mf.biggerFile();
+                        break;
+                    case 10:
                         System.out.print("Append: ");
                         mf.writeText(lea.next().equalsIgnoreCase("SI"));
+                        break;
+                    case 11:
+                        mf.readText();
+                        break;
                 }
             }
             catch(InputMismatchException e){
@@ -87,7 +97,7 @@ public class FileTest {
             catch(IOException e){
                 System.out.println("Error: "+e.getMessage());
             }
-        }while(op!=10);
+        }while(op!=12);
     }
 
 }

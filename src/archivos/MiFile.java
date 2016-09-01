@@ -6,6 +6,7 @@
 package archivos;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
@@ -125,6 +126,49 @@ public class MiFile {
         }
     }
     
+    void biggerFile(){
+        File f = fileMaxFor();
+        if(f!=null)
+            System.out.println(f.getName()+"-"+f.length()+" bytes.");
+        else
+            System.out.println("No se encontro ninguno.");
+    }
     
+    /**
+     * PRUEBA 4 pauta
+     * @return 
+     */
+    File fileMaxFor(/*String path*/){
+        //File mifile = new File(path);
+        
+        File mayor = null;
+        long bmax = 0;
+        
+        if(mifile.isDirectory()){
+            for(File child : mifile.listFiles()){
+                if(child.isFile() && !child.isHidden()){
+                    if(child.length() > bmax){
+                        mayor = child;
+                        bmax = child.length();
+                    }
+                }
+            }
+        }
+        
+        return mayor;
+    }
+
+    void readText() throws IOException{
+        try(FileReader fr = new FileReader(mifile)){
+            
+            char buffer[] = new char[(int)mifile.length()];
+            int bytes = fr.read(buffer);
+            
+            System.out.println("\nCONTENIDO:\n-------------");
+            System.out.println(buffer);
+            System.out.println("Bytes leidos: "+bytes);
+        
+        }
+    }
     
 }
