@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Scanner;
 
 /**
  *
@@ -159,6 +160,7 @@ public class MiFile {
     }
 
     void readText() throws IOException{
+        
         try(FileReader fr = new FileReader(mifile)){
             
             char buffer[] = new char[(int)mifile.length()];
@@ -167,7 +169,15 @@ public class MiFile {
             System.out.println("\nCONTENIDO:\n-------------");
             System.out.println(buffer);
             System.out.println("Bytes leidos: "+bytes);
-        
+            
+            System.out.println("\nCON SCANNER:\n------------");
+            FileReader fr2 = new FileReader(mifile);
+            Scanner lector = new Scanner(fr2);
+            
+            while(lector.hasNext()){
+                System.out.println(lector.nextLine());
+            }
+            fr2.close();
         }
     }
     
