@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class Bancatlan {
     public static void main(String[] args) {
         
-        SalvablePlus salva = new SalvarEnMemoria();
+        SalvablePlus salva = new SalvarEnArchivo();
         
         salva.salvar(new CuentaAhorro(2, "Mae", "LPS"));
         salva.salvar(new CuentaPlazoFijo(3, "Monique", "LPS"));
