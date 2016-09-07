@@ -116,7 +116,27 @@ public class JavaMail {
      * @param username username
      * @return true si existe o false si no.
      */
-    private boolean userInFile(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private boolean userInFile(String username)throws IOException {
+        rUsers.seek(0);
+        
+        while(rUsers.getFilePointer() < rUsers.length()){
+            //esquivar el codigo
+            rUsers.skipBytes(4);
+            //username
+            String u = rUsers.readUTF();
+            //posicion despues del dato username
+            long pos = rUsers.getFilePointer();
+            //avanzamos hasta el boolean
+            rUsers.readUTF();//name
+            rUsers.readUTF();//password
+            rUsers.readUTF();//genero
+            rUsers.skipBytes(16);//fecha+size
+            if(rUsers.readBoolean() && u.equals(username)){
+                //lo dejamos despues del username
+                rUsers.seek(pos);
+                return true;
+            }
+        }
+        return false;
     }
 }
