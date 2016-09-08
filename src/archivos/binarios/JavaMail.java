@@ -139,4 +139,48 @@ public class JavaMail {
         }
         return false;
     }
+    
+    public boolean increaseSizeForUser(String username,long size)throws IOException{
+        if(userInFile(username)){
+            rUsers.readUTF();
+            rUsers.readUTF();
+            rUsers.readUTF();
+            rUsers.readLong();
+            long s = rUsers.readLong()+size;
+            
+            if(s <= MAX_PER_INBOX){
+                rUsers.seek(rUsers.getFilePointer()-8);
+                rUsers.writeLong(s);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Imprime COD-Username-Name-Genero-Size de todos los
+     * usuarios activos
+     * @throws IOException 
+     */
+    public void listActiveUsers()throws IOException{
+       rUsers.seek(0);
+       System.out.println("\n\nActive Users\n---------------");
+       while(rUsers.getFilePointer() < rUsers.length()){
+           int cod = rUsers.readInt();
+           String user = rUsers.readUTF()+"@javamail.com";
+           String nom = rUsers.readUTF();
+           rUsers.readUTF();
+           String g = rUsers.readUTF();
+           rUsers.readLong();
+           long size = rUsers.readLong();
+           if(rUsers.readBoolean()){
+               System.out.println(cod+"-"+user+"-"+nom+"-"+g+
+                       " Inbox size: "+size+" bytes.");
+           }
+       }
+    }
+    
+    public boolean cancelUser(String username){
+        return false;
+    }
 }
