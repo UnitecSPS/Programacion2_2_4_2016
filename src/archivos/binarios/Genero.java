@@ -7,7 +7,7 @@ package archivos.binarios;
 
 /**
  *
- * @author Aula
+ * @author jrmartinez
  */
 public enum Genero {
     MASCULINO, FEMENINO

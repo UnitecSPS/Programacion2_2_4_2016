@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package archivos.binarios;
 
 /**
  *
- * @author mac
+ * @author jrmartinez
  */
 public enum InboxOption {
-    
+    NORMAL, FAVORITE, SPAM
 }

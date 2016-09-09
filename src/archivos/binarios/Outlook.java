@@ -11,11 +11,12 @@ import java.util.Scanner;
 
 /**
  *
- * @author Aula
+ * @author jrmartinez
  */
 public class Outlook {
     static JavaMail mail = new JavaMail();
     static Scanner lea = new Scanner(System.in);
+    static boolean r;
     
     public static void main(String[] args) {
         int op=0, sop;
@@ -79,8 +80,10 @@ public class Outlook {
      *  SI FUE EXITOSO:
      *      Se llama subMenuUser()
      */
-    private static void session() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private static void session() throws IOException {
+        if(mail.login(mail.currentUser.username,mail.currentUser.password )){
+            mail.subMenuEmail(mail.pos);
+        }
     }
     
     /**
@@ -95,6 +98,40 @@ public class Outlook {
      * Si recibe una excepcion, se atrapa y se muestra el mensaje.
      */
     private static void subMenuUser(){
-        
+        do{
+        try{
+            System.out.println("a)Mirar mi Inbox.");
+            System.out.println("b)Leer un Correo");
+            System.out.println("c)Mandar Correo");
+            System.out.println("d)Cancelar mi correo");
+            System.out.println("e)Log Out");
+            
+            String op= lea.next();
+            switch(op){
+                case "a":
+                    System.out.println("NORMAL,FAVORITE,SPAM");
+                    Genero opc = Genero.valueOf(lea.next());
+                    break;
+                case "b":
+                    System.out.println("reciever,subject,content,attachments");
+                    String rec = lea.next();
+                    String sub = lea.next();
+                    String cont = lea.next();
+                    int attc = lea.nextInt();
+                    mail.sendEmailTo(rec, sub, cont, attc);
+                    break;
+                case "c":
+                    mail.cancelMyAccount();
+                    r=true;
+                    break;
+                case "d":
+                    r=true;
+            }
+            
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        }while(r);
     }
 }

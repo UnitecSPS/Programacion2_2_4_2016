@@ -10,7 +10,7 @@ import java.io.RandomAccessFile;
 
 /**
  *
- * @author Aula
+ * @author jrmartinez
  */
 public class User {
     public String username, name, password;

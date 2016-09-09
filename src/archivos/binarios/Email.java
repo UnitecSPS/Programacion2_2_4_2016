@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  *
- * @author Aula
+ * @author jrmartinez
  */
 public class Email {
     public long byteInicio;
