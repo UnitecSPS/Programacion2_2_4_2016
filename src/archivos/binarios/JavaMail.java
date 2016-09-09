@@ -50,6 +50,10 @@ public class JavaMail {
     private RandomAccessFile rCods, rUsers;
     User currentuser;
     
+    User currentUser = null;
+    
+    
+    
     public JavaMail(){
         try{
             //1-Aseguremos que el folder javamail exista
@@ -198,12 +202,39 @@ public class JavaMail {
      * @param password
      * @return True si el usuario es correcto o false si no.
      */
-    public boolean login(String username, String password){
-        
-        
+    public boolean login(String username, String password) throws IOException{
+        if(userInFile(username)){
+            if(pass(password)){
+                currentUser.username.equals(username);
+                currentUser.password.equals(password);
+                return true;
+            }
+            System.out.println("Password es incorrecto");
+            return false;
+        }
+        System.out.println("Usuario no existe");
+        return false;
+                 
+    }
+    private boolean pass(String pass) throws IOException{
+    rUsers.seek(0);
+        while(rUsers.getFilePointer() < rUsers.length()){
+            //esquivar el codigo
+            rUsers.skipBytes(4);
+            rUsers.readUTF(); //user
+            rUsers.readUTF();//name
+            String p = rUsers.readUTF();//password
+            long pos = rUsers.getFilePointer();
+            rUsers.readUTF();//genero
+            rUsers.skipBytes(16);//fecha+size
+            if(rUsers.readBoolean() && p.equals(pass)){
+                //lo dejamos despues del username
+                rUsers.seek(pos);
+                return true;
+            }
+        }
         return false;
     }
-    
     /**
      * 2- Imprime el Inbox del Current User, si el currentUser esta null, se
      * deja propagar el NullPointerException.
@@ -310,9 +341,21 @@ public class JavaMail {
      *          datos boolean.
      * @param byteInicio ByteInicio del correo dentro del archivo de emails
      */
-    public void readEmail(long byteInicio){
+    public void readEmail(long byteInicio) throws IOException{
+        RandomAccessFile u = currentUser.getInboxFile();
+        while(u.getFilePointer()<u.length()){
+        u.seek(byteInicio);
+        System.out.println(u.readUTF()+u.readUTF()+u.readLong());
+        long pos = u.getFilePointer();
+        u.readBoolean(); //leido
+        u.seek(pos);
+        u.writeBoolean(true);
         
+        subMenuEmail(byteInicio);
+        subMenuEmail(currentUser.getInboxFile().getFilePointer());
+        }
     }
+        
     
     /**
      * 4- Muestra un Sub menu con las opciones:
@@ -386,7 +429,21 @@ public class JavaMail {
      * @param receiver
      * @return 
      */
-    public boolean sendEmailTo(String receiver, String subject, String content, int attachments){
+    public boolean sendEmailTo(String receiver, String subject, String content, int attachments) throws IOException{
+        Date hoy;
+        if(userInFile(receiver.split("@javamail.jml"))){
+            User u = new User(receiver,subject,content,Genero);
+            long size = (content.length()+ 2) + (attachments*3);
+            if(increaseSizeForUser(receiver,size)){
+                Emails.add(receiver,subject,content,attachments);
+                return true;
+            }
+            else{
+                System.out.println("Tamaño de correo muy grande");
+                return false;
+            }
+        }
+        System.out.println("Usuario no existe");
         return false;
     }
     
@@ -418,6 +475,8 @@ public class JavaMail {
      * 7- Asigna null al currentUser
      */
     public void logOut(){
-        currentuser=null;
+        currentUser = null;
+        
     }
 }
+
