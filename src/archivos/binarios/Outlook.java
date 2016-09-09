@@ -97,7 +97,7 @@ public class Outlook {
      * Si recibe una excepcion, se atrapa y se muestra el mensaje.
      */
     private static void subMenuUser(){
-        int opcion=0, sop;
+        int opcion=0;
         
         do{
             System.out.println("1- Mirar mi Inbox");
@@ -134,10 +134,10 @@ public class Outlook {
                         break;
                     case 4:
                         mail.cancelMyAccount();
-                        break;
+                        return;
                     case 5:
                         mail.logOut();
-                        break;
+                        return;
                 }
             }
             
@@ -147,7 +147,8 @@ public class Outlook {
             catch(Exception e){
                 System.out.println(e.getMessage());
             }
-        }while(opcion !=4 || opcion !=5);
+            System.out.println(opcion);
+        }while(opcion !=6);
         
     }
 }
