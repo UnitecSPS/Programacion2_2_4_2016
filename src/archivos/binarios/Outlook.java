@@ -79,8 +79,17 @@ public class Outlook {
      *  SI FUE EXITOSO:
      *      Se llama subMenuUser()
      */
-    private static void session() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private static void session()throws IOException{
+        System.out.print("Username: ");
+        String u = lea.next();
+        System.out.print("Password: ");
+        String p = lea.next();
+        if(mail.login(u, p)){
+            System.out.println("Logged in");
+            subMenuUser();
+        }
+        else
+            System.out.println("Datos invalidos");
     }
     
     /**
@@ -95,6 +104,56 @@ public class Outlook {
      * Si recibe una excepcion, se atrapa y se muestra el mensaje.
      */
     private static void subMenuUser(){
-        
+        int op = 0;
+        do{
+            System.out.println("1- Mirar mi Inbox");
+            System.out.println("2- Leer un correo");
+            System.out.println("3- Mandar correo");
+            System.out.println("4- Cancelar correo");
+            System.out.println("5- Log out");        
+            try{
+                op = lea.nextInt();
+                
+                switch(op){
+                    case 1: 
+                        System.out.print("Que tipo de correos (SPAM, FAVORITOS, NORMAL): ");
+                        String tipo = lea.next().toUpperCase();
+                        mail.showMyInbox(InboxOption.valueOf(tipo));
+                        break;
+                    case 2:
+                        mail.readEmail(0);
+                        break;
+                    case 3:
+                        System.out.print("Destinatario: ");
+                        String receiver = lea.next();
+                        System.out.print("Subject: ");
+                        String subject = lea.next();
+                        System.out.print("Contenido: ");
+                        String contenido = lea.next();
+                        System.out.print("Cuantos datos adjuntos: ");
+                        int datos = lea.nextInt();                        
+                        mail.sendEmailTo(receiver, subject, contenido, datos);
+                        break;
+                    case 4:
+                        System.out.println("Username: ");
+                        String username = lea.next();
+                        mail.cancelMyAccount(username);
+                        break;
+                    case 5:
+                        System.out.println("Username: ");
+                        String user = lea.next();
+                        mail.cancelMyAccount(user);
+                        break;
+                    case 6:
+                        mail.logOut();
+                        break;
+                }
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+            
+        }while(op!=5 || op!=6);
     }
+    
 }
