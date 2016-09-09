@@ -80,7 +80,7 @@ public class Outlook {
      *      Se llama subMenuUser()
      */
     private static void session() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        mail.login(username, password)
     }
     
     /**

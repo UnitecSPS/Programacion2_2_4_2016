@@ -5,9 +5,12 @@
  */
 package archivos.binarios;
 
+import static archivos.binarios.Outlook.lea;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -45,6 +48,7 @@ public class JavaMail {
     public static final long MAX_PER_INBOX = 104857600;
     public static final String ROOT = "javamail";
     private RandomAccessFile rCods, rUsers;
+    User currentuser;
     
     public JavaMail(){
         try{
@@ -55,6 +59,8 @@ public class JavaMail {
             rUsers = new RandomAccessFile(ROOT+"/users.jml", "rw");
             //3- Asegurarnos que el archivo de codigos comienze en 0
             initCodes();
+            //init current user
+            currentuser=null;
         }
         catch(IOException e){
             System.out.println("No deberia de caer aqui");
@@ -193,6 +199,8 @@ public class JavaMail {
      * @return True si el usuario es correcto o false si no.
      */
     public boolean login(String username, String password){
+        
+        
         return false;
     }
     
@@ -211,8 +219,82 @@ public class JavaMail {
      *     ultimo hasta el primero para que se miren de recientes a viejos.
      *  e) Se imprime cuentos emails estan sin leer y cuantos leidos.
      */
-    public void showMyInbox(InboxOption option){
-        
+    public void showMyInbox(InboxOption option)throws NullPointerException{
+       try{ 
+           currentuser.getInboxFile().seek(0);
+           ArrayList <Email> Emails=new ArrayList <>();
+           while(currentuser.getInboxFile().getFilePointer()<currentuser.getInboxFile().length()){
+                 long byteInicio=currentuser.getInboxFile().getFilePointer();
+                 long fecha=currentuser.getInboxFile().readLong();
+                 String sender=currentuser.getInboxFile().readUTF();
+                 String subject=currentuser.getInboxFile().readUTF();
+                 String content=currentuser.getInboxFile().readUTF();
+                 int attachments=currentuser.getInboxFile().readInt();
+                 boolean favorito=currentuser.getInboxFile().readBoolean();
+                 boolean spam=currentuser.getInboxFile().readBoolean();
+                 boolean leido=currentuser.getInboxFile().readBoolean();
+                 boolean borrado=currentuser.getInboxFile().readBoolean();
+          //arraylist
+                if(!borrado)
+               Emails.add(new Email(byteInicio,sender,subject,fecha,leido));
+           }  
+           
+            System.out.println(currentuser.toString());
+           int totalLeidos=0;
+             switch(option){
+                  case NORMAL: 
+                      for(int x=Emails.size();0<=x;x--){
+                     currentuser.getInboxFile().seek(Emails.get(x).byteInicio);
+                     currentuser.getInboxFile().skipBytes(8);
+                     currentuser.getInboxFile().readUTF();
+                     currentuser.getInboxFile().readUTF();
+                     currentuser.getInboxFile().readUTF();
+                     currentuser.getInboxFile().readInt();
+                     currentuser.getInboxFile().readBoolean();//favorito
+                     if(Emails.get(x).leido)
+                         totalLeidos++;
+                     if(!currentuser.getInboxFile().readBoolean())//NO es spam
+                              System.out.println(Emails.get(x).toString());
+
+                  }
+                      break;
+                  case FAVORITE:
+                      for(int x=Emails.size();0<=x;x--){
+                     currentuser.getInboxFile().seek(Emails.get(x).byteInicio);
+                     currentuser.getInboxFile().skipBytes(8);
+                     currentuser.getInboxFile().readUTF();
+                     currentuser.getInboxFile().readUTF();
+                     currentuser.getInboxFile().readUTF();
+                     currentuser.getInboxFile().readInt();
+                     if(Emails.get(x).leido)
+                         totalLeidos++;
+                     if(currentuser.getInboxFile().readBoolean())//favorito
+                          System.out.println(Emails.get(x).toString());
+               }
+                      break;
+                 case SPAM: 
+                      for(int x=Emails.size();0<=x;x--){
+                     currentuser.getInboxFile().seek(Emails.get(x).byteInicio);
+                     currentuser.getInboxFile().skipBytes(8);
+                     currentuser.getInboxFile().readUTF();
+                     currentuser.getInboxFile().readUTF();
+                     currentuser.getInboxFile().readUTF();
+                     currentuser.getInboxFile().readInt();
+                     currentuser.getInboxFile().readBoolean();//favorito
+                     if(Emails.get(x).leido)
+                         totalLeidos++;
+                     if(currentuser.getInboxFile().readBoolean())//Es spam
+                              System.out.println(Emails.get(x).toString());
+                    
+                  }
+                      System.out.println("Total Leidos: "+totalLeidos);
+                      System.out.println("Total No Leidos"+(Emails.size()-totalLeidos));
+                      break;  
+             }
+       }
+       catch(IOException e){
+           System.out.println("Problema con el Archivo Inbox");
+       }
     }
     
     /**
@@ -245,7 +327,44 @@ public class JavaMail {
      *          termina el ciclo
      * @param byteInicio 
      */
-    public void subMenuEmail(long byteInicio){
+    public void subMenuEmail(RandomAccessFile Raf,long byteInicio)throws IOException{
+       int opcion=0;
+        do{
+        System.out.println("1-Spam \n2-Favorito \n3-Borrar \n4-Regresar");
+        opcion= lea.nextInt();
+        
+        switch(opcion){
+            case 1:
+                Raf.seek(byteInicio+4);
+                if(Raf.readBoolean()){
+                    Raf.seek(Raf.getFilePointer()-4);
+                    Raf.writeBoolean(false);
+                }else{
+                     Raf.seek(Raf.getFilePointer()-4);
+                     Raf.writeBoolean(true);
+                }
+            
+                 break;
+            case 2:
+            Raf.seek(byteInicio);
+                if(Raf.readBoolean()){
+                    Raf.seek(Raf.getFilePointer()-4);
+                    Raf.writeBoolean(false);
+                }else{
+                     Raf.seek(Raf.getFilePointer()-4);
+                     Raf.writeBoolean(true);
+                }
+                
+                break;
+                
+            case 3: 
+                Raf.seek(byteInicio+8);
+                 Raf.writeBoolean(true);
+                break;
+                       
+        }
+        }while(opcion!=4);
+        
         
     }
     
@@ -277,13 +396,28 @@ public class JavaMail {
      * @param username
      * @return 
      */
-    public void cancelMyAccount(){
+    public void cancelMyAccount() throws IOException{
+        while(rUsers.getFilePointer() < rUsers.length()){
+            rUsers.readInt();
+           String user = rUsers.readUTF();
+           rUsers.readUTF();
+           rUsers.readUTF();
+           rUsers.readUTF();
+           rUsers.readLong();
+           rUsers.readLong();
+           long pos=rUsers.getFilePointer();
+           if(rUsers.readBoolean() && user.equals(currentuser.username)){
+              rUsers.seek(pos);
+              rUsers.writeBoolean(false);//ya no es activa 
+           }
+       }
     }
+    
     
     /**
      * 7- Asigna null al currentUser
      */
     public void logOut(){
-        
+        currentuser=null;
     }
 }
