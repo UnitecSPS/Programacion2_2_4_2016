@@ -19,6 +19,7 @@ public class Outlook {
     
     public static void main(String[] args) {
         int op=0, sop;
+        lea.useDelimiter("\n");
         
         do{
             System.out.println("1- Agregar Usuario");
@@ -79,8 +80,19 @@ public class Outlook {
      *  SI FUE EXITOSO:
      *      Se llama subMenuUser()
      */
-    private static void session() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private static void session() throws IOException {
+        System.out.println("Username: ");
+        String u = lea.next();
+        System.out.println("Password: ");
+        String p = lea.next();
+        
+        if(mail.login(u, p)){
+            System.out.println("Bienvenido "+u+"!!\n");
+            subMenuUser();
+        }
+        else{
+            System.out.println("Usuario invalido\n");
+        }
     }
     
     /**
@@ -95,6 +107,55 @@ public class Outlook {
      * Si recibe una excepcion, se atrapa y se muestra el mensaje.
      */
     private static void subMenuUser(){
+        char op='a';
         
+        do{
+            System.out.println("a) Mirar Inbox");
+            System.out.println("b) Mandar Correo");
+            System.out.println("c)Leer Correo");
+            System.out.println("d) Cancelar mi Correo");
+            System.out.println("e) Log Out");
+            System.out.print("Opcion: ");
+            
+            try{
+                op = lea.next().charAt(0);
+                
+                if(op=='a'){
+                    //inbox
+                    System.out.println("Opcion NORMAL, FAVORITE o SPAM?: ");
+                    InboxOption option = InboxOption.valueOf(lea.next().toUpperCase());
+                    mail.showMyInbox(option);
+                }
+                else if(op=='b'){
+                    //mandar correo
+                    System.out.print("To: ");
+                    String to = lea.next();
+                    System.out.print("Subject: ");
+                    String sub = lea.next();
+                    System.out.println("Contenido: ");
+                    String cont = lea.next();
+                    System.out.print("Numero de Attachments: ");
+                    int atta = lea.nextInt();
+                    
+                    mail.sendEmailTo(to, sub, cont, atta);
+                }
+                else if(op=='c'){
+                    //leer correo
+                    System.out.println("Codigo (byte inicio): ");
+                    mail.readEmail(lea.nextLong());
+                }
+                else if(op=='d'){
+                    //cancelar correo
+                    System.out.println("Desea cancelar su cuenta?: ");
+                    if(lea.next().equalsIgnoreCase("SI")){
+                        mail.cancelMyAccount();
+                        break;//parar ciclo
+                    }
+                }
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+        }while(op!='e');
     }
 }

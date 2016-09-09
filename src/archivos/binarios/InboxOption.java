@@ -11,5 +11,5 @@ package archivos.binarios;
  * @author mac
  */
 public enum InboxOption {
-    
+    NORMAL, FAVORITE, SPAM
 }

@@ -6,8 +6,10 @@
 package archivos.binarios;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -45,6 +47,7 @@ public class JavaMail {
     public static final long MAX_PER_INBOX = 104857600;
     public static final String ROOT = "javamail";
     private RandomAccessFile rCods, rUsers;
+    private User currentUser = null;
     
     public JavaMail(){
         try{
@@ -192,7 +195,17 @@ public class JavaMail {
      * @param password
      * @return True si el usuario es correcto o false si no.
      */
-    public boolean login(String username, String password){
+    public boolean login(String username, String password)throws IOException{
+        if(userInFile(username)){
+            String n = rUsers.readUTF();//nombre
+            String p = rUsers.readUTF();//password
+            if(password.equals(p)){
+                //usuario correcto
+                Genero gen = Genero.valueOf(rUsers.readUTF());
+                currentUser = new User(username, n, p, gen);
+                return true;
+            }
+        }
         return false;
     }
     
@@ -211,8 +224,44 @@ public class JavaMail {
      *     ultimo hasta el primero para que se miren de recientes a viejos.
      *  e) Se imprime cuentos emails estan sin leer y cuantos leidos.
      */
-    public void showMyInbox(InboxOption option){
+    public void showMyInbox(InboxOption option) throws IOException{
+        RandomAccessFile inbox = currentUser.getInboxFile();
+        ArrayList<Email> mails = new ArrayList<>();
+        System.out.println("\nINBOX de: "+currentUser+"\n------------------");
         
+        while(inbox.getFilePointer() < inbox.length()){
+            long bi = inbox.getFilePointer();
+            long fecha = inbox.readLong();
+            String sender = inbox.readUTF();
+            String subject = inbox.readUTF();
+            inbox.readUTF();//contenido
+            inbox.readInt();//attachments
+            boolean fav = inbox.readBoolean();
+            boolean spam = inbox.readBoolean();
+            boolean leido = inbox.readBoolean();
+            boolean borrado= inbox.readBoolean();
+            
+            if(!borrado){
+                if( option == InboxOption.NORMAL ||
+                        (option == InboxOption.FAVORITE && fav) ||
+                        (option == InboxOption.SPAM && spam)){
+                    
+                    mails.add( new Email(bi, sender, subject,fecha, leido) );
+                }
+            }
+        }
+        
+        //imprimirlos
+        int leidos=0;
+        for(int p=mails.size()-1; p>=0; p--){
+            Email mail = mails.get(p);
+            System.out.println("-"+mail);
+            if(mail.leido)
+                leidos++;
+        }
+        int noleidos = mails.size()-leidos;
+        System.out.println(leidos+ " Leidos - "+noleidos+" No Leidos\n\n");
+        inbox.close();
     }
     
     /**
@@ -228,9 +277,35 @@ public class JavaMail {
      *          datos boolean.
      * @param byteInicio ByteInicio del correo dentro del archivo de emails
      */
-    public void readEmail(long byteInicio){
+    public void readEmail(long byteInicio)throws IOException{
+        RandomAccessFile inbox = currentUser.getInboxFile();
+        inbox.seek(byteInicio);
+        Date f = new Date(inbox.readLong());//fecha
+        String sender = inbox.readUTF();
+        String subject = inbox.readUTF();
+        String content = inbox.readUTF();
+        int attachments = inbox.readInt();
+        boolean fav = inbox.readBoolean();
+        boolean spam = inbox.readBoolean();
+        boolean leido = inbox.readBoolean();
+        boolean borrado= inbox.readBoolean();
         
+        if(!borrado){
+            System.out.println("\nCorreo Recibido el: "+f);
+            System.out.println("From: "+sender);
+            System.out.println("Subject: "+subject);
+            System.out.println("------------------\n"+content);
+            System.out.println("Attachments: "+attachments);
+            System.out.println("Favorito: "+fav+" - Spam: "+spam+"\n");
+            //marcar como leido
+            inbox.seek(inbox.getFilePointer()-2);
+            inbox.writeBoolean(true);
+            //llamar submenu
+            subMenuEmail(inbox);
+        }
+        inbox.close();
     }
+
     
     /**
      * 4- Muestra un Sub menu con las opciones:
@@ -243,10 +318,37 @@ public class JavaMail {
      *          Lo marca como borrado y termina el ciclo
      *      4- Regresar
      *          termina el ciclo
-     * @param byteInicio 
+     * @param inbox 
      */
-    public void subMenuEmail(long byteInicio){
+    public void subMenuEmail(RandomAccessFile inbox) throws IOException{
+        long byteInicio = inbox.getFilePointer()-4;
         
+        int op;
+        do{
+            inbox.seek(byteInicio);
+            boolean fav = inbox.readBoolean();
+            boolean spam = inbox.readBoolean();
+        
+            System.out.println("1-"+(spam?"Desmarcar":"Marcar")+ " como Spam");
+            System.out.println("2-"+(fav?"Desmarcar":"Marcar")+ " como Favorito");
+            System.out.println("3- Borrar Email");
+            System.out.println("4- Regresar");
+            op = Outlook.lea.nextInt();
+            
+            if(op==1){
+                inbox.seek(inbox.getFilePointer()-1);
+                inbox.writeBoolean(!spam);
+            }
+            else if(op==2){
+                inbox.seek(inbox.getFilePointer()-2);
+                inbox.writeBoolean(!fav);
+            }
+            else if(op==3){
+                inbox.readUTF();//leido
+                inbox.writeBoolean(true);//borrado
+                break;//termina ciclo
+            }
+        }while(op!=4);
     }
     
     /**
@@ -267,8 +369,45 @@ public class JavaMail {
      * @param receiver
      * @return 
      */
-    public boolean sendEmailTo(String receiver, String subject, String content, int attachments){
-        return false;
+    public boolean sendEmailTo(String receiver, String subject, String content, int attachments) throws IOException{
+        String senderData[] = receiver.split("@");
+        String toUsername = senderData[0];
+        long size = (content.length()+2) + (attachments*3);
+        
+        //lo busca y mira si lo soporta
+        if(increaseSizeForUser(toUsername, size))
+        {
+            userInFile(toUsername);//para  que regrese el puntero
+            //datos del usuario
+            String n = rUsers.readUTF();
+            String p = rUsers.readUTF();
+            Genero gem = Genero.valueOf(rUsers.readUTF());
+            rUsers.readLong();//fecha
+            //actualizar size---
+            long s = rUsers.readLong()+size;
+            rUsers.seek(rUsers.getFilePointer()-8);
+            rUsers.writeLong(s);
+            //formar un user
+            User user = new User(toUsername, n, p, gem);
+            RandomAccessFile inbox = user.getInboxFile();
+            //escribir el correo----------
+            inbox.seek(inbox.length());
+            inbox.writeLong(new Date().getTime());//fecha de hoy
+            inbox.writeUTF(currentUser.username);
+            inbox.writeUTF(subject);
+            inbox.writeUTF(content);
+            inbox.writeInt(attachments);
+            inbox.writeBoolean(false);
+            inbox.writeBoolean(false);
+            inbox.writeBoolean(false);
+            inbox.writeBoolean(false);
+            inbox.close();
+            return false;
+        }
+        else{
+            System.out.println("Usuario No existe o no puede recibir emils");
+            return false;
+        }
     }
     
     /**
@@ -277,13 +416,21 @@ public class JavaMail {
      * @param username
      * @return 
      */
-    public void cancelMyAccount(){
+    public void cancelMyAccount() throws IOException{
+        if(userInFile(currentUser.username)){
+            rUsers.readUTF();//nombre
+            rUsers.readUTF();//password
+            rUsers.readUTF();//genero
+            rUsers.skipBytes(16);//fecha+size
+            rUsers.writeBoolean(false);
+            logOut();
+        }
     }
     
     /**
      * 7- Asigna null al currentUser
      */
     public void logOut(){
-        
+        currentUser = null;
     }
 }
