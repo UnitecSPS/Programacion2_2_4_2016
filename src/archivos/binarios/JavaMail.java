@@ -321,7 +321,8 @@ public class JavaMail {
      * @param inbox 
      */
     public void subMenuEmail(RandomAccessFile inbox) throws IOException{
-        long byteInicio = inbox.getFilePointer()-4;
+        //tomar el byte justo antes del boolean del favorito
+        long byteInicio = inbox.getFilePointer()-3;
         
         int op;
         do{
