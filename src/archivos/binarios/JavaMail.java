@@ -180,7 +180,110 @@ public class JavaMail {
        }
     }
     
-    public boolean cancelUser(String username){
+    /**
+     * 1- Busca si existe un usuario con ese username, si existe se comprueba 
+     * que el password es el correcto. 
+     * SI lo Es:
+     *  - Inicializa el atributo currentUser con los datos de dicho usuario.
+     *  - Retorna true
+     * SI NO lo es:
+     *  - Retornar false
+     * @param username
+     * @param password
+     * @return True si el usuario es correcto o false si no.
+     */
+    public boolean login(String username, String password){
         return false;
+    }
+    
+    /**
+     * 2- Imprime el Inbox del Current User, si el currentUser esta null, se
+     * deja propagar el NullPointerException.
+     *  a) Se utiliza el archivo de emails del currentUser
+     *  b) Se recorre dicho archivo para ir formando objetos Email con los datos
+     *    requeridos y guardandolos en un ArrayList de tipo Email creado.
+     *    PERO OJO solo que no esten marcados como borrado y: 
+     *      * Si el option es NORMAL: Solo se toman en cuenta los emails que NO son spam
+     *      * Si el option es FAVORITE: Solo se toman en cuenta los emails favoritos
+     *      * Si el option es SPAM: Solo se toman en cuenta los emails Spam.
+     *  c) Se muestra los datos del currentUser (utilizar su toString)
+     *  d) Se imprime todos los objetos emails agregados al ArrayList desde el
+     *     ultimo hasta el primero para que se miren de recientes a viejos.
+     *  e) Se imprime cuentos emails estan sin leer y cuantos leidos.
+     */
+    public void showMyInbox(InboxOption option){
+        
+    }
+    
+    /**
+     * 3- Muestra todo el contenido de un email. Se recibe el byteInicio de dicho
+     * email tal y como se muestra en el inbox.
+     *      a) Se lee la informacion del email y se imprime completa siempre y
+     *          cuando NO este marcado como borrado.
+     *      b) Si se produce una exception (quiza por un byteInicio malo) mientras
+     *          se esta leyendo, se deja propagar
+     *          pro
+     *      d) Se marca como leido
+     *      c) Se llama el subMenuEmail y se le manda el byte de Inicio de los
+     *          datos boolean.
+     * @param byteInicio ByteInicio del correo dentro del archivo de emails
+     */
+    public void readEmail(long byteInicio){
+        
+    }
+    
+    /**
+     * 4- Muestra un Sub menu con las opciones:
+     *    CICLO MIENTRAS RESPUESTA es != 4
+     *      1- Marcar/Desmarcar como Spam (dependiendo si esta true o no)
+     *          Invierte el valor booleano del spam
+     *      2- Marcar/Desmarcar como Favorito
+     *          Invierte el valor booleano del favorito
+     *      3- Borrar email
+     *          Lo marca como borrado y termina el ciclo
+     *      4- Regresar
+     *          termina el ciclo
+     * @param byteInicio 
+     */
+    public void subMenuEmail(long byteInicio){
+        
+    }
+    
+    /**
+     * 5- Manda un correo a un usuario existente. El correo viene en el parametro
+     *  receiver (Usar Split de String para extraer el username antes de la @
+     *   a) Verificar que el usuario exista:
+     *      - SI EXISTE:
+     *        1- Formar un objeto User con sus datos necesarios.
+     *        2- Sacar el tamaño del correo. Formula: (size de content + 2) + (attachments*3)
+     *        3- Verificar con la funcion increaseSizeForUser de que soporte dicho correo.
+     *           3.1 SI LO SOPORTA: Crear un nuevo registro en su archivo de correos con
+     *                  los datos que recibe. Por default se toma la fecha del momento y todos
+     *                  sus booleanos estan en false.
+     *                  Retorna true
+     *           3.2 Se indica el problema y se retorna false.
+     *      - SI NO EXISTE:
+     *        1- Se indica el problema y se retorna false.
+     * @param receiver
+     * @return 
+     */
+    public boolean sendEmailTo(String receiver, String subject, String content, int attachments){
+        return false;
+    }
+    
+    /**
+     * 6- Funcion que marca al currentUser como un usuario borrado.
+     *      a) Si todo se hizo bien, se llama logOut().
+     * @param username
+     * @return 
+     */
+    public void cancelMyAccount(){
+    }
+    
+    /**
+     * 7- Asigna null al currentUser
+     */
+    public void logOut(){
+        
     }
 }

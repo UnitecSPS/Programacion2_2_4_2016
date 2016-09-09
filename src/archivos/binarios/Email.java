@@ -12,11 +12,13 @@ import java.util.Date;
  * @author Aula
  */
 public class Email {
+    public long byteInicio;
     public String sender, subject;
     public Date date;
     public boolean leido;
 
-    public Email(String sender, String subject, long date, boolean leido) {
+    public Email(long byteInicio, String sender, String subject, long date, boolean leido) {
+        this.byteInicio = byteInicio;
         this.sender = sender;
         this.subject = subject;
         this.date = new Date(date);
@@ -25,7 +27,7 @@ public class Email {
     
     @Override
     public String toString(){
-        return date+"-"+sender+"-"+subject
+        return byteInicio+"-"+date+"-"+sender+"-"+subject
                 +(leido ? "-Leido":"-No Leido");
     }
 }

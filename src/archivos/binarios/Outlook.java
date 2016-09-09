@@ -73,7 +73,28 @@ public class Outlook {
             System.out.println("USUARIO YA ESTA TOMADO\n\n");
     }
 
+    /**
+     * 1- Manda a llamar la funcion login del objeto mail y se confirma si
+     * se pudo login o no.
+     *  SI FUE EXITOSO:
+     *      Se llama subMenuUser()
+     */
     private static void session() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    /**
+     * 2- funcion que imprime un menu con las opciones que llama la funcion 
+     * correspondiente de mail:
+     *      a)Mirar mi Inbox. Pedir el InboxOption
+     *      b)Leer un Correo
+     *      c)Mandar Correo
+     *      c)Cancelar mi correo
+     *      d)Log Out
+     * El ciclo termina cuando le dan cancelar mi correo o logout. 
+     * Si recibe una excepcion, se atrapa y se muestra el mensaje.
+     */
+    private static void subMenuUser(){
+        
     }
 }
