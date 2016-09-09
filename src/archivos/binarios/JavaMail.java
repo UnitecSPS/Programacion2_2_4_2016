@@ -5,9 +5,11 @@
  */
 package archivos.binarios;
 
+import static archivos.binarios.InboxOption.FAVORITE;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -31,7 +33,7 @@ import java.util.Date;
  * 
  * javamail/username_inbox.jml
  * -------------------------------
- * long fecha
+* long fecha
  * String sender
  * String subject
  * String content
@@ -39,12 +41,14 @@ import java.util.Date;
  * boolean favorito
  * boolean spam
  * boolean leido
- * boolean borrado
+ * boolean borrado 
  */
 public class JavaMail {
     public static final long MAX_PER_INBOX = 104857600;
     public static final String ROOT = "javamail";
     private RandomAccessFile rCods, rUsers;
+    public User currentUser = null;
+    public ArrayList <Email> array= new ArrayList<>();
     
     public JavaMail(){
         try{
@@ -211,9 +215,54 @@ public class JavaMail {
      *     ultimo hasta el primero para que se miren de recientes a viejos.
      *  e) Se imprime cuentos emails estan sin leer y cuantos leidos.
      */
-    public void showMyInbox(InboxOption option){
-        
+    public void showMyInbox(InboxOption option) throws IOException{
+        System.out.println("\n\nShow my Inbox\n---------------");
+        int c = 0,b= 0;       
+        if(currentUser != null){
+            RandomAccessFile inbox = currentUser.getInboxFile();
+            inbox.seek(0);
+            while(rUsers.getFilePointer() < rUsers.length()){
+                long fecha = inbox.readLong();
+                String sender = inbox.readUTF();
+                String subject = inbox.readUTF();
+                inbox.readUTF();
+                inbox.readInt();
+                boolean favoritos = inbox.readBoolean(); 
+                boolean leido = inbox.readBoolean();
+                    if(leido)
+                        c++;
+                    else
+                        b++;
+                boolean spam = inbox.readBoolean();
+                inbox.readBoolean();
+
+                switch(option){
+                    case NORMAL:                                                      
+                        if(!leido){
+                            array.add(new Email(0,sender,subject,fecha,leido));
+                        }                            
+                      break;
+                    case FAVORITE:                           
+                        if(favoritos)
+                            array.add(new Email(0,sender,subject,fecha,leido));
+                        break;                            
+                    case SPAM:
+                        if(spam)
+                            array.add(new Email(0,sender,subject,fecha,leido));    
+                        break;                           
+                }
+
+            }
+            currentUser.toString();
+            for(Email a:array){
+                System.out.println(""+a.byteInicio + a.date + a.leido + a.sender + a.subject);
+            }
+            System.out.println("Leidos= "+c+" , No leidos= "+b);
+
+        }
     }
+        
+    
     
     /**
      * 3- Muestra todo el contenido de un email. Se recibe el byteInicio de dicho
@@ -277,13 +326,21 @@ public class JavaMail {
      * @param username
      * @return 
      */
-    public void cancelMyAccount(){
+    public void cancelMyAccount() throws IOException{
+        if(userInFile(currentUser.username)){
+            rUsers.readUTF();
+            rUsers.readUTF();
+            rUsers.readUTF();
+            rUsers.skipBytes(16);
+            rUsers.writeBoolean(false);
+            logOut();
+        }       
     }
     
     /**
      * 7- Asigna null al currentUser
      */
     public void logOut(){
-        
+        currentUser = null;
     }
 }

@@ -80,7 +80,9 @@ public class Outlook {
      *      Se llama subMenuUser()
      */
     private static void session() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(mail.login(lea.next(),lea.next())){
+            subMenuUser();
+        }
     }
     
     /**
@@ -95,6 +97,57 @@ public class Outlook {
      * Si recibe una excepcion, se atrapa y se muestra el mensaje.
      */
     private static void subMenuUser(){
+        int opcion=0, sop;
+        
+        do{
+            System.out.println("1- Mirar mi Inbox");
+            System.out.println("2- Leer un Correo");
+            System.out.println("3- Mandar Correo");
+            System.out.println("4- Cancelar mi correo");
+            System.out.println("5- Log Out");
+            System.out.print("opcion: ");
+            
+            try{
+                opcion = lea.nextInt();
+
+                switch(opcion){
+                    case 1:
+                        System.out.println("NORMAL, FAVORITE o SPAM");
+                        InboxOption p = InboxOption.valueOf(lea.next());
+                        mail.showMyInbox(p);
+                        break;
+                    case 2:
+                        System.out.println("Ingrese el Byte de Inicio");
+                        long z = lea.nextLong();
+                        mail.readEmail(z);
+                        break;
+                    case 3:
+                        System.out.println("Receiver");
+                        String rec = lea.next();
+                        System.out.println("Subjetc");
+                        String sub = lea.next();
+                        System.out.println("Content");
+                        String cont = lea.next();
+                        System.out.println("Attachments");
+                        int attac = lea.nextInt();
+                        mail.sendEmailTo(rec, sub, cont, attac);
+                        break;
+                    case 4:
+                        mail.cancelMyAccount();
+                        break;
+                    case 5:
+                        mail.logOut();
+                        break;
+                }
+            }
+            
+            catch(InputMismatchException e){
+                System.out.println("Ingrese un valor valido");
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }while(opcion !=4 || opcion !=5);
         
     }
 }
