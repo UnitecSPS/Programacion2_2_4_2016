@@ -79,7 +79,7 @@ public class Outlook {
      *  SI FUE EXITOSO:
      *      Se llama subMenuUser()
      */
-    private static void session() {
+    private static void session() throws IOException {
         if(mail.login(lea.next(),lea.next())){
             subMenuUser();
         }
