@@ -7,10 +7,12 @@ package archivos.binarios;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 
 /**
  *
@@ -196,7 +198,18 @@ public class JavaMail {
      * @param password
      * @return True si el usuario es correcto o false si no.
      */
-    public boolean login(String username, String password){
+    public boolean login(String username, String password) throws IOException{
+        if(userInFile(username)){
+            String p = rUsers.readUTF();
+            if(rUsers.readUTF().equalsIgnoreCase(password)){
+                for(Genero g : Genero.values()){
+                    if(g.toString().equalsIgnoreCase(rUsers.readUTF()))
+                    currentUser = new User(username,p,password,g);
+                }
+                return true;
+            }
+        }
+            
         return false;
     }
     
@@ -215,7 +228,7 @@ public class JavaMail {
      *     ultimo hasta el primero para que se miren de recientes a viejos.
      *  e) Se imprime cuentos emails estan sin leer y cuantos leidos.
      */
-    public void showMyInbox(InboxOption option) throws IOException{
+    public void showMyInbox(InboxOption option) throws IOException,NullPointerException{
         System.out.println("\n\nShow my Inbox\n---------------");
         int c = 0,b= 0;       
         if(currentUser != null){
@@ -277,8 +290,26 @@ public class JavaMail {
      *          datos boolean.
      * @param byteInicio ByteInicio del correo dentro del archivo de emails
      */
-    public void readEmail(long byteInicio){
-        
+    public void readEmail(long byteInicio) throws FileNotFoundException, IOException{
+      RandomAccessFile f = currentUser.getInboxFile();
+      f.seek(byteInicio);
+      long a = f.readLong();
+      String sen = f.readUTF();
+      String sub = f.readUTF();
+      String c = f.readUTF();
+      f.skipBytes(6);
+      long y = f.getFilePointer();
+      f.writeBoolean(true);
+      f.seek(y);
+      boolean l = f.readBoolean();
+      boolean b = f.readBoolean();
+      if(!b){
+          Email e = new Email(byteInicio,sen,sub,a,l);
+          System.out.println(e);
+          System.out.println("");
+          System.out.println(c);
+          subMenuEmail(byteInicio);
+      }
     }
     
     /**
@@ -294,7 +325,36 @@ public class JavaMail {
      *          termina el ciclo
      * @param byteInicio 
      */
-    public void subMenuEmail(long byteInicio){
+    public void subMenuEmail(long byteInicio) throws IOException{
+        System.out.println("Para salir presione 4");
+        Scanner x = new Scanner(System.in);
+        RandomAccessFile f = currentUser.getInboxFile();
+        f.seek(byteInicio);
+        long a = f.readLong();
+        String sen = f.readUTF();
+        String sub = f.readUTF();
+        String c = f.readUTF();
+        long p = f.getFilePointer();
+        do{
+            switch(x.nextInt()){
+                case 1:
+                    f.readBoolean();
+                    f.writeBoolean(true);
+                    f.skipBytes(2);
+                    f.seek(p);
+                    break;
+                case 2:
+                    f.writeBoolean(true);
+                    f.readBoolean();
+                    f.skipBytes(2);
+                    f.seek(p);
+                    break;
+                case 3:
+                    f.skipBytes(3);
+                    f.writeBoolean(true);
+                    return;
+            }
+        }while(x.nextInt() != 4);
         
     }
     
@@ -316,7 +376,33 @@ public class JavaMail {
      * @param receiver
      * @return 
      */
-    public boolean sendEmailTo(String receiver, String subject, String content, int attachments){
+    public boolean sendEmailTo(String receiver, String subject, String content, int attachments) throws IOException{
+        User f = null ;
+        String[] t = receiver.split("@");
+        String t2 = t[0];
+        if(userInFile(t2)){
+            String p = rUsers.readUTF();
+            for(Genero g : Genero.values()){
+                if(g.toString().equalsIgnoreCase(rUsers.readUTF()))
+                f = new User(t2,p,rUsers.readUTF(),g);
+            }
+            long e = content.length()+2+(attachments*3);
+            if(this.increaseSizeForUser(receiver, e)){
+                Date j = new Date();
+                RandomAccessFile r =f.getInboxFile();
+                r.seek(r.length());
+                r.writeLong(j.getTime());
+                r.writeUTF(receiver);
+                r.writeUTF(subject);
+                r.writeUTF(content);
+                r.writeInt(attachments);
+                r.writeBoolean(false);
+                r.writeBoolean(false);
+                r.writeBoolean(false);
+                r.writeBoolean(false);
+            }
+            return true;
+        }
         return false;
     }
     
