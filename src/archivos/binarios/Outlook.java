@@ -80,7 +80,12 @@ public class Outlook {
      *      Se llama subMenuUser()
      */
     private static void session() {
-        mail.login(username, password)
+       System.out.print("Username: ");
+        String u = lea.next();
+        System.out.print("Password: ");
+        String p = lea.next();
+        if(mail.login(u, p))
+            subMenuUser();
     }
     
     /**
