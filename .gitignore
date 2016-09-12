@@ -69,8 +69,8 @@ nbproject/*
 !nbproject/project.xml
 College/*
 
-#Jtunes files
-data/*
+#JavaMail files
+javamail/*
  
 #specific for lourdes market
 *.sml

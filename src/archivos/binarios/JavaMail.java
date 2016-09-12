@@ -345,7 +345,7 @@ public class JavaMail {
                 inbox.writeBoolean(!fav);
             }
             else if(op==3){
-                inbox.readUTF();//leido
+                inbox.readBoolean();//leido
                 inbox.writeBoolean(true);//borrado
                 break;//termina ciclo
             }
